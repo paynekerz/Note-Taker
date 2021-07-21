@@ -41,8 +41,11 @@ app.post("/api/notes/", async (req, res) => {
     const newNote = req.body
     newNote.id = req.body.title
     const oldNotes = await fs.readFile(dbPath, "utf8");
-    let newNotes = [newNote, ...oldNotes];
-    fs.writeFile(dbPath, newNotes);
+    let parsedNotes = JSON.parse(oldNotes)
+    console.log(oldNotes)
+    let newNotes = [newNote, ...parsedNotes];
+    fs.writeFile(dbPath, JSON.stringify(newNotes));
+    console.log(newNote)
     res.json(newNotes);
   }
   catch (err){
@@ -55,8 +58,9 @@ app.delete("/api/notes/:id", async (req, res) => {
   try { 
   const deletedNote = req.params.id;
   const storedNotes = await fs.readFile(dbPath, "utf8");
-  let filteredNotes = storedNotes.filter(note => deletedNote !== note.id)
-  fs.writeFile(dbPath, filteredNotes);
+  let parsedNotes = JSON.parse(storedNotes)
+  let filteredNotes = parsedNotes.filter(note => deletedNote !== note.id)
+  fs.writeFile(dbPath, JSON.stringify(filteredNotes));
   res.json(filteredNotes);
   }
   catch {
