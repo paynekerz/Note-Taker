@@ -1,4 +1,3 @@
-//using final star wars and tucker solved as a reference
 const path = require("path");
 const fs = require("fs/promises");
 const express = require('express');
